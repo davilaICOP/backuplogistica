@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "usuario_ID")
     private Integer usuarioID;
 
@@ -29,7 +29,6 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "rolUsuario_ID") 
     private RolUsuario rolUsuario;
 
-    // Constructors, getters, and setters
 
     public Usuario() {
     }
@@ -72,4 +71,7 @@ public class Usuario implements Serializable {
     public void setRolUsuario(RolUsuario rolUsuario) {
         this.rolUsuario = rolUsuario;
     }
+    public String getNombreRol() {
+    return rolUsuario != null ? rolUsuario.getNombreRol() : null;
+}
 }

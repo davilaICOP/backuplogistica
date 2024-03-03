@@ -37,7 +37,6 @@ public class Cliente implements Serializable {
 
     @Column(name = "nro_telefono")
     private long nro_telefono;
-    
     @Column(name = "estado")  // Nueva columna "estado"
     private String estado;
     

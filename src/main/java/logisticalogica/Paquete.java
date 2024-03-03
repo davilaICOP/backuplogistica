@@ -26,10 +26,28 @@ public class Paquete implements Serializable {
 
     @Column(name = "codigo_paquete")
     private Integer codigo_paquete;
+     @ManyToOne
+    @JoinColumn(name = "origenProvinciaID")
+    private Provincia origen;
+
+    @ManyToOne
+    @JoinColumn(name = "destinoProvinciaID")
+    private Provincia destino;
+
+    @ManyToOne
+    @JoinColumn(name = "origenLocalidadID")
+    private Localidad localidadOrigen;
+
+    @ManyToOne
+    @JoinColumn(name = "destinoLocalidadID")
+    private Localidad localidadDestino;
 
     @Column(name = "descripcion")
     private String descripcion;
-
+    
+    @Column(name = "domicilioRetiro")
+    private String domicilioRetiro;
+    
     @Column(name = "domicilioEntrega")
     private String domicilioEntrega;
 
@@ -41,8 +59,7 @@ public class Paquete implements Serializable {
     private Cliente emisor;
 
     @ManyToOne
-   
-    
+       
     @JoinColumn(name = "clienteReceptorID")
     private Cliente receptor;
     @Column(name = "fechaentrega")
@@ -50,19 +67,60 @@ public class Paquete implements Serializable {
 
     @Column(name = "fecharecibido")
     private Date fechaRecibido;
-
+    
     public Paquete() {
     }
 
-    public Paquete(Integer paqueteID, Integer codigo_paquete, String descripcion, String domicilioEntrega, String estado, Cliente emisor, Cliente receptor) {
+    public Paquete(Integer paqueteID, Integer codigo_paquete, Provincia origen, Provincia destino, Localidad localidadOrigen, Localidad localidadDestino, String descripcion, String domicilioRetiro, String domicilioEntrega, String estado, Cliente emisor, Cliente receptor, Date fechaEntrega, Date fechaRecibido) {
         this.paqueteID = paqueteID;
         this.codigo_paquete = codigo_paquete;
+        this.origen = origen;
+        this.destino = destino;
+        this.localidadOrigen = localidadOrigen;
+        this.localidadDestino = localidadDestino;
         this.descripcion = descripcion;
+        this.domicilioRetiro = domicilioRetiro;
         this.domicilioEntrega = domicilioEntrega;
         this.estado = estado;
         this.emisor = emisor;
         this.receptor = receptor;
+        this.fechaEntrega = fechaEntrega;
+        this.fechaRecibido = fechaRecibido;
     }
+
+    public Provincia getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(Provincia origen) {
+        this.origen = origen;
+    }
+
+    public Provincia getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Provincia destino) {
+        this.destino = destino;
+    }
+
+    public Localidad getLocalidadOrigen() {
+        return localidadOrigen;
+    }
+
+    public void setLocalidadOrigen(Localidad localidadOrigen) {
+        this.localidadOrigen = localidadOrigen;
+    }
+
+    public Localidad getLocalidadDestino() {
+        return localidadDestino;
+    }
+
+    public void setLocalidadDestino(Localidad localidadDestino) {
+        this.localidadDestino = localidadDestino;
+    }
+
+  
 
     public Integer getPaqueteID() {
         return paqueteID;
@@ -86,6 +144,14 @@ public class Paquete implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getDomicilioRetiro() {
+        return domicilioRetiro;
+    }
+
+    public void setDomicilioRetiro(String domicilioRetiro) {
+        this.domicilioRetiro = domicilioRetiro;
     }
 
     public String getDomicilioEntrega() {
@@ -136,5 +202,4 @@ public class Paquete implements Serializable {
         this.fechaRecibido = fechaRecibido;
     }
 
-    
 }

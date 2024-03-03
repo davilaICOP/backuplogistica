@@ -5,11 +5,10 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 @Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2024-03-03T17:59:23", comments="EclipseLink-2.7.12.v20230209-rNA")
-@StaticMetamodel(Marca.class)
-public class Marca_ { 
+@StaticMetamodel(Provincia.class)
+public class Provincia_ { 
 
-    public static volatile SingularAttribute<Marca, String> tipo;
-    public static volatile SingularAttribute<Marca, Integer> marcaID;
-    public static volatile SingularAttribute<Marca, String> modelo;
+    public static volatile SingularAttribute<Provincia, Integer> provinciaID;
+    public static volatile SingularAttribute<Provincia, String> nombre;
 
 }

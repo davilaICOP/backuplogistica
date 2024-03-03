@@ -5,20 +5,16 @@
 package Controladoras;
 
 import java.util.List;
-import logisticalogica.RolUsuario;
-import logisticalogica.Usuario;
+import logisticalogica.Provincia;
 import logisticapersistencia.ControladoraPersistencia;
 
 /**
  *
  * @author ULTRA
  */
-public class ControladoraRolUsuario {
+public class ControladoraProvincia {
     ControladoraPersistencia controlpersis = new ControladoraPersistencia();
-   
-    public List<RolUsuario> obtenerTodosLosRoles() {
-        return controlpersis.obtenerTodosLosRoles();
+    public List<Provincia> obtenerTodasLasProvincias() {
+        return controlpersis.obtenerTodasLasProvincias();
     }
 }
-    
-

@@ -4,6 +4,7 @@
  */
 package Controladoras;
 
+import logisticalogica.Usuario;
 import logisticapersistencia.ControladoraPersistencia;
 
 /**
@@ -11,8 +12,25 @@ import logisticapersistencia.ControladoraPersistencia;
  * @author ULTRA
  */
 public class ControladoraUsuario {
+
+    public ControladoraUsuario() {
+    }
+    
+    
         ControladoraPersistencia controlpersis = new ControladoraPersistencia();
          public boolean autenticarUsuario(String nombreUsuario, String contraseña) {
         return controlpersis.verificarCredenciales(nombreUsuario, contraseña);
     }
+    public String obtenerRolUsuarioActual(String nombreUsuario) {
+        return controlpersis.obtenerRolUsuarioActual(nombreUsuario);
+       }  
+    
+    public String obtenerRolUsuario(String nombreUsuario) {
+        return controlpersis.obtenerRolUsuario(nombreUsuario);
+    }
+    
+    public void guardarUsuario(Usuario usuario) {
+        controlpersis.guardarUsuario(usuario);
+    }
+     
 }

@@ -7,10 +7,17 @@ package logisticaigu;
 import Controladoras.ControladoraPaquete;
 import Controladoras.ControladoraViaje;
 import Controladoras.ControladoraViajePaquete;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import logisticalogica.Paquete;
 import logisticalogica.Vehiculo;
@@ -23,26 +30,47 @@ import logisticapersistencia.ControladoraPersistencia;
  * @author ULTRA
  */
 public class AsociarPaqueteViaje extends javax.swing.JFrame {
-  ControladoraPaquete ctrlPaquete = new ControladoraPaquete();
+    ControladoraPaquete ctrlPaquete = new ControladoraPaquete();
     private int idViaje;
-        private Vehiculo vehiculoSeleccionado; // Add this line
-
-     private DefaultListModel<String> listModel = new DefaultListModel<>();
-
+    private int vehiculoId;
+    private String modelo;
+    private String patente;
+    private Vehiculo vehiculoSeleccionado; // Add this line
+    private DefaultListModel<String> listModel = new DefaultListModel<>();
+    private String rolUsuario;
     /**
      * Creates new form AsociarPaqueteViaje
      */
-    public AsociarPaqueteViaje(int idViaje) {
+    public AsociarPaqueteViaje(int vehiculoId ,String modelo,String patente,int idViaje, String rolUsuario) {
         initComponents();
+        this.vehiculoId = vehiculoId;
+        this.rolUsuario = rolUsuario;
         this.idViaje = idViaje;
-        this.vehiculoSeleccionado = vehiculoSeleccionado; // Add this line
-
+        this.vehiculoSeleccionado = vehiculoSeleccionado;
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
         
-        cargarListaPaquetes();
-
-    }
-
+        // Crear un renderizador personalizado para los encabezados de las columnas
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda horizontalmente
+        headerRenderer.setVerticalAlignment(SwingConstants.CENTER); // Centrar verticalmente
+        headerRenderer.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer la fuente a Arial 18
+        // Aplicar el renderizador personalizado a los encabezados de las columnas
+        jTable1.getTableHeader().setDefaultRenderer(headerRenderer);
    
+        cargarListaPaquetes();
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting() && jTable1.getSelectedRowCount() > 0) {
+                    jButton2.setEnabled(true);
+                } else {
+                    jButton2.setEnabled(false);
+                }
+            }
+        });
+        
+        cargarListaPaquetes();    
+        jButton2.setEnabled(false);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,7 +110,7 @@ public class AsociarPaqueteViaje extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -102,14 +130,15 @@ public class AsociarPaqueteViaje extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addGap(100, 100, 100)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1888, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1334, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(100, 100, 100)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -118,11 +147,11 @@ public class AsociarPaqueteViaje extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 875, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -130,7 +159,9 @@ public class AsociarPaqueteViaje extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,31 +174,59 @@ public class AsociarPaqueteViaje extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     int[] selectedRows = jTable1.getSelectedRows();
 
-    // Hacer algo con las filas seleccionadas
-    for (int selectedRow : selectedRows) {
-        // Obtener el código de paquete de la fila seleccionada
-        Integer codigoPaquete = (Integer) jTable1.getValueAt(selectedRow, 0);
+    if (selectedRows.length == 0) {
+        // Crear un JLabel para personalizar el mensaje
+        JLabel messageLabel = new JLabel("Por favor, seleccione al menos un paquete.");
+        // Establecer la fuente del JLabel
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        // Mostrar el cuadro de diálogo de advertencia con el JLabel personalizado y el título personalizado
+        JOptionPane.showMessageDialog(this, messageLabel, "Alerta", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
-        // Resto del código para asociar el paquete al viaje
-        ViajePaquete viajePaquete = new ViajePaquete();
+    ControladoraViaje controladoraViaje = new ControladoraViaje();
+    Viaje viaje = controladoraViaje.obtenerViajePorId(idViaje);
+
+    for (int selectedRow : selectedRows) {
+        Integer codigoPaquete = (Integer) jTable1.getValueAt(selectedRow, 0);
 
         ControladoraPersistencia controladoraPersistencia = new ControladoraPersistencia();
         Paquete paquete = controladoraPersistencia.obtenerPaquetePorCodigo(codigoPaquete);
 
-        ControladoraViaje controladoraViaje = new ControladoraViaje();
-        Viaje viaje = controladoraViaje.obtenerViajePorId(idViaje);
+        // Impresión del origen y destino del paquete
+        System.out.println("Origen del paquete: " + paquete.getOrigen().getNombre() + ", " + paquete.getLocalidadOrigen().getNombre());
+        System.out.println("Destino del paquete: " + paquete.getDestino().getNombre() + ", " + paquete.getLocalidadDestino().getNombre());
+        
+        // Impresión del origen y destino del viaje
+        System.out.println("Origen del viaje: " + viaje.getOrigen().getNombre() + ", " + viaje.getLocalidadOrigen().getNombre());
+        System.out.println("Destino del viaje: " + viaje.getDestino().getNombre() + ", " + viaje.getLocalidadDestino().getNombre());
 
-        // Guardar la asociación en la base de datos
+        boolean coincideOrigen = paquete.getOrigen().getNombre().equalsIgnoreCase(viaje.getOrigen().getNombre().trim()) && paquete.getLocalidadOrigen().getNombre().equalsIgnoreCase(viaje.getLocalidadOrigen().getNombre().trim());
+        boolean coincideDestino = paquete.getDestino().getNombre().equalsIgnoreCase(viaje.getDestino().getNombre().trim()) && paquete.getLocalidadDestino().getNombre().equalsIgnoreCase(viaje.getLocalidadDestino().getNombre().trim());
+
+        if (!coincideOrigen || !coincideDestino) {
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    this,
+                    "El origen o destino del paquete no coincide con el origen o destino del viaje. ¿Seguro que desea continuar?",
+                    "Confirmar",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirmacion == JOptionPane.NO_OPTION) {
+                System.out.println("El usuario ha cancelado la acción."); // Depuración en la consola
+                return;
+            }
+        }
+
+        ViajePaquete viajePaquete = new ViajePaquete();
         viajePaquete.setPaquete(paquete);
         viajePaquete.setViaje(viaje);
         ControladoraViajePaquete ctrlViajePaquete = new ControladoraViajePaquete();
         ctrlViajePaquete.crearviajepaquete(viajePaquete);
 
-        // Cambiar el estado del paquete a "EN CAMINO"
-        paquete.setEstado("EN CAMINO");
+        paquete.setEstado("PLANIFICADO");
         ctrlPaquete.actualizarEstadoPaquete(paquete);
 
-        // Eliminar la fila asociada al paquete de la JTable
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.removeRow(selectedRow);
     }
@@ -181,63 +240,79 @@ public class AsociarPaqueteViaje extends javax.swing.JFrame {
     );
 
     if (confirmacion == JOptionPane.NO_OPTION) {
-        // Si elige NO, ir a la pantalla ViajeIGU
-        new ViajeIGU().setVisible(true);
+        new Viajes(rolUsuario).setVisible(true);
         dispose();
     } else {
-        // Si elige YES, cargar nuevamente la lista de paquetes y actualizar la JTable
         cargarListaPaquetes();
-        // Actualizar la JTable con la nueva lista de paquetes
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.fireTableDataChanged();
-        // Puedes agregar lógica adicional aquí si es necesario
     }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     ViajeIGU atras = new ViajeIGU();
+     ViajeVehiculo atras = new ViajeVehiculo(vehiculoId,modelo, patente, rolUsuario);
      atras.setVisible(true);
      dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-     private void cargarListaPaquetes() {
-    // Obtener todos los paquetes en estado "Pendiente"
+    private void cargarListaPaquetes() {
     List<Paquete> paquetesPendientes = ctrlPaquete.filtrarPaquetesPorEstado("PENDIENTE");
-
-    // Obtener todos los paquetes en estado "Devuelto"
     List<Paquete> paquetesDevueltos = ctrlPaquete.filtrarPaquetesPorEstado("Devuelto");
-
-    // Fusionar ambas listas
+    
+    // Unir las listas de paquetes pendientes y devueltos
     paquetesPendientes.addAll(paquetesDevueltos);
 
-    // Crear un modelo de tabla personalizado
     DefaultTableModel modelo = new DefaultTableModel();
     modelo.addColumn("Código Paquete");
     modelo.addColumn("Descripción");
     modelo.addColumn("Estado");
+    modelo.addColumn("Domicilio de Retiro");
     modelo.addColumn("Domicilio de Entrega");
-    modelo.addColumn("Fecha Recibido");
+    modelo.addColumn("Fecha Registro Paquete");
+    modelo.addColumn("Provincia Origen");
+    modelo.addColumn("Localidad Origen");
+    modelo.addColumn("Provincia Destino");
+    modelo.addColumn("Localidad Destino");
+    modelo.addColumn("Emisor");
+    modelo.addColumn("Receptor");
 
-    // Limpiar el modelo de la tabla
     jTable1.setModel(modelo);
 
-    // Agregar los paquetes al modelo de la tabla
     for (Paquete paquete : paquetesPendientes) {
-        // Asumo que los campos son objetos, ajusta según tu implementación
+        String nombreApellidoEmisor = paquete.getEmisor() != null ? paquete.getEmisor().getNombre() + " " + paquete.getEmisor().getApellido() : "";
+        String nombreApellidoReceptor = paquete.getReceptor() != null ? paquete.getReceptor().getNombre() + " " + paquete.getReceptor().getApellido() : "";
+
         Object[] fila = new Object[]{
             paquete.getCodigo_paquete(),
             paquete.getDescripcion(),
             paquete.getEstado(),
+            paquete.getDomicilioRetiro(),
             paquete.getDomicilioEntrega(),
-            paquete.getFechaRecibido() // Asumo que tienes un método getFechaRecibido(), ajusta según tu implementación
+            paquete.getFechaRecibido(),
+            paquete.getOrigen().getNombre(),
+            paquete.getLocalidadOrigen().getNombre(),
+            paquete.getDestino().getNombre(),
+            paquete.getLocalidadDestino().getNombre(),
+            nombreApellidoEmisor,
+            nombreApellidoReceptor
         };
 
         modelo.addRow(fila);
     }
 }
+
+
     /**
      * @param args the command line arguments
      */
+    private String obtenerEstadoPaquete(int codigoPaquete) {
+    List<Paquete> paquetes = ctrlPaquete.filtrarPaquetesPorCodigo(codigoPaquete);
     
+    if (!paquetes.isEmpty()) {
+        return paquetes.get(0).getEstado(); 
+    } else {
+        return ""; 
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

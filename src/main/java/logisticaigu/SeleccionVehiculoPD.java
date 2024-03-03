@@ -5,8 +5,16 @@
 package logisticaigu;
 
 import Controladoras.ControladoraVehiculo;
+import java.awt.Font;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import logisticalogica.Vehiculo;
 
@@ -18,14 +26,40 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
  private ControladoraVehiculo controladoraVehiculo = new ControladoraVehiculo();
     private List<Vehiculo> vehiculos;
     private int idVehiculoSeleccionado;
+    private String rolUsuario;
     /**
      * Creates new form SeleccionVehiculoPD
      */
-    public SeleccionVehiculoPD() {
+    public SeleccionVehiculoPD(String rolUsuario) {
         initComponents();
         this.idVehiculoSeleccionado = idVehiculoSeleccionado;
-
+        this.rolUsuario = rolUsuario;
         mostrarTodosLosVehiculos();
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
+        
+        // Crear un renderizador personalizado para los encabezados de las columnas
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda horizontalmente
+        headerRenderer.setVerticalAlignment(SwingConstants.CENTER); // Centrar verticalmente
+        headerRenderer.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer la fuente a Arial 18
+        
+        // Aplicar el renderizador personalizado a los encabezados de las columnas
+        jTable1.getTableHeader().setDefaultRenderer(headerRenderer);
+        
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            // Verificar si hay una fila seleccionada en la tabla
+            if (!jTable1.getSelectionModel().isSelectionEmpty()) {
+                // Habilitar el botón "Dar de baja"
+                jButton2.setEnabled(true);
+            } else {
+                // Deshabilitar el botón "Dar de baja"
+                jButton2.setEnabled(false);
+            }
+        }
+    });
+          
          // Agregar DocumentListener a jTextField1
     jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
         @Override
@@ -87,9 +121,9 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Seleccion del vehiculo");
+        jLabel1.setText("Seleccionar vehiculo");
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -141,11 +175,11 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 643, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1888, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2)
@@ -165,7 +199,7 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,7 +226,7 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Menu atras = new Menu();
+        Menu atras = new Menu(rolUsuario);
         atras.setVisible(true);
         dispose(); // Cierra la pantalla actual
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -200,37 +234,7 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SeleccionVehiculoPD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SeleccionVehiculoPD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SeleccionVehiculoPD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SeleccionVehiculoPD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SeleccionVehiculoPD().setVisible(true);
-            }
-        });
-    }
+    
    private void mostrarTodosLosVehiculos() {
     // Asignar los vehículos obtenidos a la lista de vehículos de la clase
     vehiculos = controladoraVehiculo.obtenerTodosLosVehiculos();
@@ -268,40 +272,61 @@ public class SeleccionVehiculoPD extends javax.swing.JFrame {
         Vehiculo vehiculoSeleccionado = vehiculos.get(selectedRow);
 
         if ("Activo".equalsIgnoreCase(vehiculoSeleccionado.getEstado())) {
-            int opcion = javax.swing.JOptionPane.showConfirmDialog(
+            // Crear un JLabel para personalizar la fuente
+            JLabel patentevehiculo = new JLabel("<html>¿Seguro que desea seleccionar el vehículo con patente " + vehiculoSeleccionado.getPatente() + "?</html>");
+            
+            // Establecer la fuente del JLabel
+            patentevehiculo.setFont(new Font("Arial", Font.PLAIN, 18));
+
+            // Crear un array de objetos para personalizar los botones del JOptionPane
+            Object[] options = {"Sí", "No"};
+
+            int opcion = javax.swing.JOptionPane.showOptionDialog(
                 this,
-                "¿Seguro que desea seleccionar el vehículo con patente " + vehiculoSeleccionado.getPatente() + "?",
+                patentevehiculo,
                 "Confirmar Selección",
-                javax.swing.JOptionPane.YES_NO_OPTION
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
             );
 
             if (opcion == javax.swing.JOptionPane.YES_OPTION) {
                 // El usuario seleccionó "Sí", abrir el formulario RegistrarViaje y pasar el objeto Vehiculo
-                ParteDiarioIGU partediario = new ParteDiarioIGU(vehiculoSeleccionado);
+                ParteDiarioIGU partediario = new ParteDiarioIGU(vehiculoSeleccionado, rolUsuario);
                 partediario.setVisible(true);
                 this.dispose(); // Cierra la ventana actual
             }
         } else {
             // El vehículo seleccionado no está activo
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "El vehículo seleccionado no está activo. Por favor, seleccione un vehículo activo.",
+            // Crear un JLabel con el mensaje y configurar la fuente
+            JLabel vehiculonoactivo = new JLabel("El vehículo seleccionado no está activo. Por favor, seleccione un vehículo activo.");
+            vehiculonoactivo.setFont(new Font("Arial", Font.PLAIN, 18));
+
+            // Mostrar el cuadro de diálogo con el JLabel personalizado como mensaje
+            JOptionPane.showMessageDialog(
+                null,
+                vehiculonoactivo,
                 "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
-            );
+                JOptionPane.ERROR_MESSAGE
+        );
         }
     } else {
         // No se ha seleccionado ningún vehículo
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Por favor, seleccione un vehículo antes de continuar.",
+        // Crear un JLabel con el mensaje
+        JLabel selecvehi = new JLabel("Por favor, seleccione un vehículo antes de continuar.");
+        selecvehi.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        // Mostrar el cuadro de diálogo
+        JOptionPane.showMessageDialog(
+            null,
+            selecvehi,
             "Error",
-            javax.swing.JOptionPane.ERROR_MESSAGE
+            JOptionPane.ERROR_MESSAGE
         );
     }
 }
-
-
 public void filtrarVehiculosPorModelo() {
     String modeloFiltrado = jTextField1.getText().trim().toLowerCase();
     mostrarVehiculosEnTabla(controladoraVehiculo.filtrarVehiculosPorModeloCoincidente(modeloFiltrado));

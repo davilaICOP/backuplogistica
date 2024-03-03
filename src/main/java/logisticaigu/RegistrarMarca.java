@@ -14,13 +14,14 @@ import logisticalogica.Marca;
 public class RegistrarMarca extends javax.swing.JFrame {
     private ControladoraMarca controladoraMarca; 
     private MarcaIGU marcaIGU;
-
+    private String rolUsuario;
 
     /**
      * Creates new form RegistrarMarca
      */
-    public RegistrarMarca(MarcaIGU marcaIGU) {
+    public RegistrarMarca(MarcaIGU marcaIGU, String rolUsuario) {
         initComponents();
+        this.rolUsuario = rolUsuario;
         this.marcaIGU = marcaIGU;
 
         controladoraMarca = new ControladoraMarca();
@@ -69,7 +70,7 @@ public class RegistrarMarca extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Modelo:");
+        jLabel2.setText("Marca:");
 
         jTextField1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
 
@@ -79,6 +80,11 @@ public class RegistrarMarca extends javax.swing.JFrame {
 
         jComboBox1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Camion", "Camioneta", "SUV", "Automovil" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -140,12 +146,13 @@ public class RegistrarMarca extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    String modelo = jTextField1.getText();
-        String tipo = (String) jComboBox1.getSelectedItem();
+     String modelo = jTextField1.getText();
+    String tipo = (String) jComboBox1.getSelectedItem();
 
-        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres registrar la marca?", "Confirmar Registro", JOptionPane.YES_NO_OPTION);
+    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres registrar la marca?", "Confirmar Registro", JOptionPane.YES_NO_OPTION);
 
-        if (camposLlenos()) {
+    if (camposLlenos()) {
+        if (!controladoraMarca.marcaExistente(modelo, tipo)) {
             if (confirmacion == JOptionPane.YES_OPTION) {
                 Marca nuevaMarca = new Marca();
                 nuevaMarca.setModelo(modelo);
@@ -157,16 +164,23 @@ public class RegistrarMarca extends javax.swing.JFrame {
                 marcaIGU.mostrarMarcaIGU();  // Vuelve a mostrar la ventana MarcaIGU
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ya existe una marca registrada con el mismo modelo y tipo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
     
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    MarcaIGU atras = new MarcaIGU(this.marcaIGU);
+    MarcaIGU atras = new MarcaIGU(this.marcaIGU, rolUsuario);
         atras.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 private boolean camposLlenos() {
         return !jTextField1.getText().isEmpty() ;
     }

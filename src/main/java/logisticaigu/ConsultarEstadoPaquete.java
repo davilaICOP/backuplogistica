@@ -5,8 +5,16 @@
 package logisticaigu;
 
 import Controladoras.ControladoraPaquete;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import logisticalogica.Paquete;
 
@@ -18,16 +26,28 @@ public class ConsultarEstadoPaquete extends javax.swing.JFrame {
     ControladoraPaquete controladoraPaquete = new ControladoraPaquete();
     private List<Paquete> paquetes;
     private Paquete paqueteSeleccionado; // Declaración de paqueteSeleccionado como variable de instancia
+  private String rolUsuario;
 
 
 
     /**
      * Creates new form ConsultarEstadoPaquete
      */
-    public ConsultarEstadoPaquete() {
+    public ConsultarEstadoPaquete(String rolUsuario) {
         initComponents();
+        this.rolUsuario = rolUsuario;
         mostrarTodosLosPaquetes();
         inicializarVentana();
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
+        
+        // Crear un renderizador personalizado para los encabezados de las columnas
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda horizontalmente
+        headerRenderer.setVerticalAlignment(SwingConstants.CENTER); // Centrar verticalmente
+        headerRenderer.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer la fuente a Arial 18
+        
+        // Aplicar el renderizador personalizado a los encabezados de las columnas
+        tablafiltrar.getTableHeader().setDefaultRenderer(headerRenderer);
         
         jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
         @Override
@@ -45,6 +65,17 @@ public class ConsultarEstadoPaquete extends javax.swing.JFrame {
             filtrarPaquetes();
         }
     });
+        tablafiltrar.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                // Verificar si hay una fila seleccionada en la tabla
+                if (!e.getValueIsAdjusting() && tablafiltrar.getSelectedRow() != -1) {
+                    jButton2.setEnabled(true); // Habilitar el botón "Aceptar"
+                } else {
+                    jButton2.setEnabled(false); // Deshabilitar el botón "Aceptar"
+                }
+            }
+        });
     }
 
     /**
@@ -179,38 +210,24 @@ public class ConsultarEstadoPaquete extends javax.swing.JFrame {
 
     } else {
         // No se ha seleccionado ningún paquete
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Por favor, seleccione un paquete antes de continuar.",
-                "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
-        );
+        // Crear un JLabel para personalizar el mensaje
+        JLabel seleccionpaquete = new JLabel("Por favor, seleccione un paquete antes de continuar.");
+        // Establecer la fuente del JLabel
+        seleccionpaquete.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        // Mostrar el cuadro de diálogo de error con el JLabel personalizado y el título personalizado
+        JOptionPane.showMessageDialog(this, seleccionpaquete, "Error", JOptionPane.ERROR_MESSAGE);
+
     
     }//GEN-LAST:event_jButton2ActionPerformed
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Menu atras = new Menu();
+        Menu atras = new Menu(rolUsuario);
         atras.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-   private void mostrarPaquetesentabla(List<Paquete> paquetes) {
-        DefaultTableModel modelo = (DefaultTableModel) tablafiltrar.getModel();
-        modelo.setRowCount(0); // Elimina todas las filas existentes en la tabla
-
-        for (Paquete paquete : paquetes) {
-            modelo.addRow(new Object[]{
-                paquete.getCodigo_paquete(),
-                paquete.getDescripcion(),
-                paquete.getReceptor().getNombre(),
-                paquete.getDomicilioEntrega()
-                
-            });
-        }
-    }
+   
     
    private void inicializarVentana() {
         tablafiltrar.getSelectionModel().addListSelectionListener(e -> {
@@ -234,7 +251,6 @@ public class ConsultarEstadoPaquete extends javax.swing.JFrame {
             paquete.getDescripcion(),
             nombreReceptor,
             paquete.getDomicilioEntrega()
-            // Agrega más columnas según la información que desees mostrar
         });
     }
 }
@@ -268,12 +284,17 @@ public class ConsultarEstadoPaquete extends javax.swing.JFrame {
    }
    private void mostrarEstadoPaquete() {
     // Muestra un JOptionPane con el estado del paquete
-    javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Estado del paquete: " + paqueteSeleccionado.getEstado(),
-            "Estado del Paquete",
-            javax.swing.JOptionPane.INFORMATION_MESSAGE
-    );
+    // Obtener el estado del paquete
+    String estadoPaquete = paqueteSeleccionado.getEstado();
+
+    // Crear un JLabel para personalizar el mensaje con la información del estado del paquete
+    JLabel estadopaquete = new JLabel("Estado del paquete: " + estadoPaquete);
+    // Establecer la fuente del JLabel
+    estadopaquete.setFont(new Font("Arial", Font.PLAIN, 18));
+
+    // Mostrar el cuadro de diálogo de información con el JLabel personalizado y el título personalizado
+    JOptionPane.showMessageDialog(this, estadopaquete, "Estado del Paquete", JOptionPane.INFORMATION_MESSAGE);
+
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

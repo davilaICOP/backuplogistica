@@ -6,9 +6,17 @@ package logisticaigu;
 
 import Controladoras.ControladoraPaquete;
 import Controladoras.ControladoraVehiculo;
+import Controladoras.ControladoraViaje;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import static logisticaigu.GestionarEntrega.vehiculoSeleccionado;
 import logisticalogica.EnviarCorreo;
@@ -19,20 +27,36 @@ import logisticalogica.Paquete;
  * @author ULTRA
  */
 public class ConfirmarEntrega extends javax.swing.JFrame {
-    ControladoraPaquete controladoraPaquete = new ControladoraPaquete();
+   ControladoraPaquete controladoraPaquete = new ControladoraPaquete();
     private List<Paquete> paquetes;
-private List<Paquete> paquetesEnCamino; // Agregar esta línea
-
-
+    private List<Paquete> paquetesEnCamino; // Agregar esta línea
+    private String rolUsuario;
     ControladoraVehiculo controladoraVehiculo = new ControladoraVehiculo();
+    private int idViaje;
+    private int vehiculoId;
+    private String modelo;
+    private String patente;
 
-    /**
-     * Creates new form ConfirmarEntrega
-     */
-    public ConfirmarEntrega() {
+    private ControladoraViaje controladoraviaje = new ControladoraViaje();
+    public ConfirmarEntrega(int vehiculoId ,String modelo, String patente,int idViaje, String rolUsuario) {
         initComponents();
+        this.rolUsuario = rolUsuario;
+        this.idViaje = idViaje; 
+        this.vehiculoId = vehiculoId;
+        this.patente = patente;
+        this.modelo=modelo;
         abrirConfirmarEntrega();
-         jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
+
+        // Crear un renderizador personalizado para los encabezados de las columnas
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda     horizontalmente
+        headerRenderer.setVerticalAlignment(SwingConstants.CENTER); // Centrar verticalmente
+        headerRenderer.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer la fuente a Arial 18  
+        // Aplicar el renderizador personalizado a los encabezados de las columnas
+        jTable1.getTableHeader().setDefaultRenderer(headerRenderer);
+    
+        jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
         @Override
         public void insertUpdate(javax.swing.event.DocumentEvent e) {
             filtrarPaquetes();
@@ -48,7 +72,17 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
             filtrarPaquetes();
         }
     });
-    
+    jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                // Verificar si hay una fila seleccionada en la tabla
+                if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
+                    jButton2.setEnabled(true); // Habilitar el botón "Guardar"
+                } else {
+                    jButton2.setEnabled(false); // Deshabilitar el botón "Guardar"
+                }
+            }
+        });
     }
 
     /**
@@ -73,12 +107,17 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Confirmar Entrega");
+        jLabel1.setText("Confirmar entrega del paquete");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel2.setText("Codigo del paquete:");
 
         jTextField1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jButton1.setText("Volver");
@@ -96,7 +135,7 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -114,24 +153,21 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2)
-                        .addGap(100, 100, 100)
+                        .addGap(102, 102, 102)
                         .addComponent(jButton1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1888, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap())
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane1)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1334, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,12 +179,12 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,22 +202,43 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    int filaSeleccionada = jTable1.getSelectedRow();
+   int filaSeleccionada = jTable1.getSelectedRow();
 
     if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un paquete para confirmar la entrega", "Paquete no seleccionado", JOptionPane.WARNING_MESSAGE);
+        // Crear un JLabel para personalizar el mensaje
+        JLabel selecpaque = new JLabel("Por favor, seleccione un paquete para confirmar la entrega");
+        // Establecer la fuente del JLabel
+        selecpaque.setFont(new Font("Arial", Font.PLAIN, 18));
+        // Mostrar el cuadro de diálogo de advertencia con el JLabel personalizado
+        JOptionPane.showMessageDialog(this, selecpaque, "Paquete no seleccionado", JOptionPane.WARNING_MESSAGE);
     } else {
         Paquete paqueteSeleccionado = paquetesEnCamino.get(filaSeleccionada);
 
         // Mostrar un cuadro de diálogo de confirmación
-        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres seleccionar este paquete?\n\nCódigo del paquete: " + paqueteSeleccionado.getCodigo_paquete() + "\nDescripción: " + paqueteSeleccionado.getDescripcion(), "Confirmar Selección", JOptionPane.YES_NO_OPTION);
+        // Construir el mensaje con salto de línea y detalles del paquete
+        String message = "¿Seguro que quieres seleccionar este paquete?\n\n" +
+                 "Código del paquete: " + paqueteSeleccionado.getCodigo_paquete() + "\n" +
+                 "Descripción: " + paqueteSeleccionado.getDescripcion();
+
+       // Crear un JLabel para personalizar el mensaje con la fuente Arial de tamaño 18
+       JLabel selecestepaque = new JLabel(message);
+       selecestepaque.setFont(new Font("Arial", Font.PLAIN, 18));
+
+       // Mostrar el cuadro de diálogo de confirmación con el JLabel personalizado
+       int opcion = JOptionPane.showConfirmDialog(this, selecestepaque, "Confirmar Selección", JOptionPane.YES_NO_OPTION);
 
         if (opcion == JOptionPane.YES_OPTION) {
             // Array con las opciones del cuadro de diálogo
             Object[] opciones = {"Entregado", "Devuelto"};
+            
+            String mensaje2 = "Seleccione el estado del paquete:";
+            
+            // Crear un JLabel para personalizar el mensaje con la fuente Arial de tamaño 18
+            JLabel estadopaque = new JLabel(mensaje2);
+            estadopaque.setFont(new Font("Arial", Font.PLAIN, 18));
 
             // Mostrar cuadro de diálogo
-            int seleccion = JOptionPane.showOptionDialog(this, "Seleccione el estado del paquete:", "Confirmar Estado",
+            int seleccion = JOptionPane.showOptionDialog(this, estadopaque, "Confirmar Estado",
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
             if (seleccion != JOptionPane.CLOSED_OPTION) {
@@ -206,10 +263,20 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
                         enviarCorreo.sendEmail();
 
                         // Mostrar una alerta de que el correo electrónico ha sido enviado
-                        JOptionPane.showMessageDialog(this, "El correo electrónico ha sido enviado al cliente receptor.", "Correo electrónico enviado", JOptionPane.INFORMATION_MESSAGE);
+                        // Crear un JLabel para personalizar el mensaje
+                        JLabel correoenviado = new JLabel("El correo electrónico ha sido enviado al cliente receptor.");
+                        // Establecer la fuente del JLabel
+                        correoenviado.setFont(new Font("Arial", Font.PLAIN, 18));
+                        // Mostrar el cuadro de diálogo de información con el JLabel personalizado y el título personalizado
+                        JOptionPane.showMessageDialog(this, correoenviado, "Correo electrónico enviado", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         // Manejar el caso en el que el Receptor es nulo
-                        JOptionPane.showMessageDialog(this, "No se puede enviar el correo electrónico al cliente receptor porque el receptor del paquete es nulo.", "Error", JOptionPane.ERROR_MESSAGE);
+                        // Crear un JLabel para personalizar el mensaje
+                        JLabel noenviocorreo = new JLabel("No se puede enviar el correo electrónico al cliente receptor porque el receptor del paquete es nulo.");
+                        // Establecer la fuente del JLabel
+                        noenviocorreo.setFont(new Font("Arial", Font.PLAIN, 18));
+                        // Mostrar el cuadro de diálogo de error con el JLabel personalizado y el título personalizado
+                        JOptionPane.showMessageDialog(this, noenviocorreo, "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     // Devuelto
@@ -227,7 +294,12 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
                     enviarCorreoDevolucion.sendEmail();
 
                     // Mostrar una alerta de que el correo electrónico de devolución ha sido enviado
-                    JOptionPane.showMessageDialog(this, "Se ha enviado un correo electrónico al remitente informando la devolución del paquete.", "Correo electrónico enviado", JOptionPane.INFORMATION_MESSAGE);
+                    // Crear un JLabel para personalizar el mensaje
+                    JLabel correoremitente = new JLabel("Se ha enviado un correo electrónico al remitente informando la devolución del paquete.");
+                    // Establecer la fuente del JLabel
+                    correoremitente.setFont(new Font("Arial", Font.PLAIN, 18));
+                    // Mostrar el cuadro de diálogo de información con el JLabel personalizado y el título personalizado
+                    JOptionPane.showMessageDialog(this, correoremitente, "Correo electrónico enviado", JOptionPane.INFORMATION_MESSAGE);
                 }
 
                 controladoraPaquete.actualizarEstadoPaquete(paqueteSeleccionado);
@@ -237,13 +309,8 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
                 DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
                 modelo.setValueAt(paqueteSeleccionado.getEstado(), filaSeleccionada, 3); // El 3 representa la columna del estado en la tabla
 
-                // Preguntar si desea seguir en la pantalla o volver al menú
-                int opcionSeguir = JOptionPane.showConfirmDialog(this, "¿Desea seguir en esta pantalla?", "Continuar", JOptionPane.YES_NO_OPTION);
-                if (opcionSeguir == JOptionPane.NO_OPTION) {
-                    Menu atras = new Menu();
-                    atras.setVisible(true);
-                    dispose();
-                }
+                // Verificar si es necesario finalizar el viaje
+                finalizarViajeSiNecesario();
             }
         }
     }
@@ -252,35 +319,47 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        GestionarEntrega atras = new GestionarEntrega();
+        ViajeVehiculoEntrega atras = new ViajeVehiculoEntrega(vehiculoId,modelo, patente, rolUsuario);
         atras.setVisible(true);
-        dispose(); 
+        dispose();
       }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-  
- public void abrirConfirmarEntrega() {
+public void abrirConfirmarEntrega() {
     try {
-        if (vehiculoSeleccionado != null) {
-             paquetes = controladoraVehiculo.obtenerPaquetesPorVehiculo(vehiculoSeleccionado);
-            if (paquetes != null && !paquetes.isEmpty()) {
-                paquetesEnCamino = filtrarPaquetesEnCamino(paquetes); // Asignar los paquetes en camino
-                if (!paquetesEnCamino.isEmpty()) {
-                    mostrarPaquetes(paquetesEnCamino);
-                    setVisible(true);
-                } else {
-                    // Mostrar un mensaje indicando que no hay paquetes en camino para el vehículo seleccionado
-                    JOptionPane.showMessageDialog(this, "No hay paquetes en camino para el vehículo seleccionado", "Sin Paquetes", JOptionPane.INFORMATION_MESSAGE);
-                }
+        if (idViaje > 0) {
+            System.out.println("ID del Viaje: " + idViaje); 
+            paquetesEnCamino = controladoraPaquete.obtenerPaquetesEnCaminoPorViaje(idViaje);
+            System.out.println("Cantidad de paquetes en camino: " + paquetesEnCamino.size()); 
+            if (!paquetesEnCamino.isEmpty()) {
+                mostrarPaquetes(paquetesEnCamino);
+                setVisible(true);
             } else {
-                // Mostrar un mensaje indicando que no hay paquetes para el vehículo seleccionado
-                JOptionPane.showMessageDialog(this, "No hay paquetes para el vehículo seleccionado", "Sin Paquetes", JOptionPane.INFORMATION_MESSAGE);
+                // Limpiar la tabla si no hay paquetes en camino para el viaje seleccionado
+                DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+                modelo.setRowCount(0);
+                // Mostrar un mensaje indicando que no hay paquetes "EN CAMINO" para el viaje seleccionado
+                // Crear un JLabel para personalizar el mensaje
+                JLabel nopaqueencamino = new JLabel("No hay paquetes 'EN CAMINO' para el viaje seleccionado.");
+                // Establecer la fuente del JLabel
+                nopaqueencamino.setFont(new Font("Arial", Font.PLAIN, 18));
+                // Mostrar el cuadro de diálogo de información con el JLabel personalizado y el título personalizado
+                JOptionPane.showMessageDialog(this, nopaqueencamino, "Sin Paquetes", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
-            // Mostrar un mensaje indicando que no se ha seleccionado ningún vehículo
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un vehículo", "Vehículo no seleccionado", JOptionPane.WARNING_MESSAGE);
+            // Mostrar un mensaje indicando que no se ha seleccionado ningún viaje
+            // Crear un JLabel para personalizar el mensaje
+            JLabel seleccioneviaje = new JLabel("Por favor, seleccione un viaje.");
+            // Establecer la fuente del JLabel
+            seleccioneviaje.setFont(new Font("Arial", Font.PLAIN, 18));
+            // Mostrar el cuadro de diálogo de advertencia con el JLabel personalizado y el título personalizado
+            JOptionPane.showMessageDialog(this, seleccioneviaje, "Viaje no seleccionado", JOptionPane.WARNING_MESSAGE);
         }
     } catch (Exception ex) {
         ex.printStackTrace(); // Imprimir el stack trace en la consola
@@ -290,16 +369,51 @@ private List<Paquete> paquetesEnCamino; // Agregar esta línea
 
 
 
-public List<Paquete> filtrarPaquetesEnCamino(List<Paquete> paquetes) {
-    List<Paquete> paquetesEnCamino = new ArrayList<>();
+  public void mostrarPaquetes(List<Paquete> paquetes) {
+    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+    modelo.setRowCount(0); 
     for (Paquete paquete : paquetes) {
         if ("EN CAMINO".equals(paquete.getEstado())) {
-            paquetesEnCamino.add(paquete);
+            modelo.addRow(new Object[]{
+                paquete.getCodigo_paquete(),
+                paquete.getDescripcion(),
+                paquete.getDomicilioEntrega(),
+                paquete.getEstado()
+            });
         }
     }
-    return paquetesEnCamino;
+    System.out.println("Cantidad de paquetes mostrados: " + modelo.getRowCount()); // Depuración
 }
-public void mostrarPaquetes(List<Paquete> paquetes) {
+
+
+
+
+
+
+
+private void filtrarPaquetes() {
+    String codigoPaqueteTexto = jTextField1.getText();
+
+    if (!codigoPaqueteTexto.isEmpty()) {
+        List<Paquete> paquetesFiltrados = new ArrayList<>();
+        if (paquetesEnCamino != null) {
+            for (Paquete paquete : paquetesEnCamino) {
+                // Cambia la comparación para que busque coincidencias parciales del código de paquete
+                if (String.valueOf(paquete.getCodigo_paquete()).contains(codigoPaqueteTexto)) {
+                    paquetesFiltrados.add(paquete);
+                }
+            }
+            mostrarPaquetes(paquetesFiltrados);
+            System.out.println("Cantidad de paquetes filtrados: " + paquetesFiltrados.size()); // Depuración
+        } else {
+            System.out.println("La lista de paquetes está vacía o no ha sido inicializada."); // Depuración
+        }
+    } else {
+        mostrarPaquetes(paquetesEnCamino);
+    }
+}
+
+/*public void mostrarPaquetes(List<Paquete> paquetes) {
     this.paquetesEnCamino = paquetes; // Actualiza la lista de paquetes en camino
     DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
     modelo.setRowCount(0); // Limpiar la tabla
@@ -314,31 +428,69 @@ public void mostrarPaquetes(List<Paquete> paquetes) {
     }
 }
 
-  
- private void filtrarPaquetes() {
-    String codigoPaqueteTexto = jTextField1.getText();
+*/ 
+ 
 
-    if (!codigoPaqueteTexto.isEmpty()) {
-        List<Paquete> paquetesFiltrados = new ArrayList<>();
-        int codigoPaquete;
-        try {
-            codigoPaquete = Integer.parseInt(codigoPaqueteTexto);
-            if (paquetes != null) {
-                for (Paquete paquete : paquetes) {
-                    if (paquete.getCodigo_paquete() == codigoPaquete) {
-                        paquetesFiltrados.add(paquete);
-                    }
-                }
-                mostrarPaquetes(paquetesFiltrados);
-            } else {
-                System.out.println("La lista de paquetes está vacía o no ha sido inicializada.");
+private boolean todosPaquetesEntregadosODevolucionesRealizadas(int idViaje) {
+    List<Paquete> paquetes = controladoraPaquete.obtenerPaquetesEnCaminoPorViaje(idViaje);
+    for (Paquete paquete : paquetes) {
+        if (!paquete.getEstado().equals("Entregado") && !paquete.getEstado().equals("Devuelto")) {
+            return false; // Al menos un paquete no ha sido entregado ni devuelto
+        }
+    }
+    return true; // Todos los paquetes han sido entregados o devueltos
+}
+
+private void finalizarViajeSiNecesario() {
+    int idViajeSeleccionado = obtenerIdViajeSeleccionado();
+    if (idViajeSeleccionado != -1) {
+        if (todosPaquetesEntregadosODevolucionesRealizadas(idViajeSeleccionado)) {
+            int opcion = JOptionPane.showConfirmDialog(this, "¿Desea finalizar el viaje?", "Finalizar Viaje", JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.YES_OPTION) {
+                // Actualizar estado del viaje a "Baja"
+                controladoraviaje.actualizarEstadoViaje(idViajeSeleccionado, "Baja");
+                // Crear un JLabel para personalizar el mensaje
+                JLabel viajefinalizado = new JLabel("El viaje ha sido finalizado.");
+                // Establecer la fuente del JLabel
+                viajefinalizado.setFont(new Font("Arial", Font.PLAIN, 18));
+                // Mostrar el cuadro de diálogo de información con el JLabel personalizado y el título personalizado
+                JOptionPane.showMessageDialog(this, viajefinalizado, "Viaje Finalizado", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Cerrar el JFrame actual
+                dispose();
+                
+                // Abrir el JFrame ViajesEntrega
+                ViajesEntrega viajesEntrega = new ViajesEntrega(rolUsuario);
+                viajesEntrega.setVisible(true);
             }
-        } catch (NumberFormatException ex) {
-            System.out.println("Ingrese un número válido para el código de paquete.");
         }
     } else {
-        // Si el campo está vacío, muestra todos los paquetes
-        abrirConfirmarEntrega();
+        // Crear un JLabel para personalizar el mensaje
+        JLabel messageLabel = new JLabel("Por favor, seleccione un viaje.");
+        // Establecer la fuente del JLabel
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        // Mostrar el cuadro de diálogo de advertencia con el JLabel personalizado y el título personalizado
+        JOptionPane.showMessageDialog(this, messageLabel, "Alerta", JOptionPane.WARNING_MESSAGE);
+    }
+}
+
+private int obtenerIdViajeSeleccionado() {
+    return idViaje;
+}
+private void llenarTabla() {
+    try {
+        // Llena la tabla con los paquetes en camino para el viaje seleccionado
+        paquetesEnCamino = controladoraPaquete.obtenerPaquetesEnCaminoPorViaje(idViaje);
+        if (!paquetesEnCamino.isEmpty()) {
+            mostrarPaquetes(paquetesEnCamino);
+        } else {
+            // Si no hay paquetes en camino, limpia la tabla
+            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+            modelo.setRowCount(0);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace(); // Imprime el stack trace en la consola en caso de error
+        // Aquí puedes agregar un mensaje de error o manejar la excepción según tu lógica de la aplicación
     }
 }
 

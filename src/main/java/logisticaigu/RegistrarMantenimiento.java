@@ -6,6 +6,8 @@ package logisticaigu;
 
 import Controladoras.ControladoraVehiculo;
 import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import logisticalogica.Vehiculo;
 
@@ -24,7 +26,18 @@ public class RegistrarMantenimiento extends javax.swing.JFrame {
         initComponents();
         mostrarTodosLosVehiculos();
         inicializarVentana();
-
+        tablafiltrar.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting()) {
+                    // Verificar si hay una fila seleccionada en la tabla
+                    if (tablafiltrar.getSelectedRow() != -1) {
+                        Aceptar.setEnabled(true); // Habilitar el botón "Aceptar"
+                    } else {
+                        Aceptar.setEnabled(false); // Deshabilitar el botón "Aceptar"
+                    }
+                }
+            }
+        });
          Ingresarpatente.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
         @Override
         public void insertUpdate(javax.swing.event.DocumentEvent evt) {

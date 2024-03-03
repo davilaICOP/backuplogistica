@@ -11,6 +11,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import logisticalogica.Marca;
 
@@ -23,18 +25,30 @@ public class MarcaIGU extends javax.swing.JFrame {
     private Marca marcaSeleccionada;
     private ViajeIGU viajeIGU;  // Declare viajeIGU variable
     private Object ventanaQueLlama; // Agregar atributo para guardar la ventana que llama a MarcaIGU
-
+    private String rolUsuario;
     private VehiculosTotales vehiculosTotales; 
     /**
      * Creates new form RegistrarMarca
      */
-   public MarcaIGU(Object ventanaQueLlama) { // Modificar constructor para aceptar la ventana que lo llama
+   public MarcaIGU(Object ventanaQueLlama, String rolUsuario) { // Modificar constructor para aceptar la ventana que lo llama
         initComponents();
+        this.rolUsuario = rolUsuario;
         controladoraMarca = new ControladoraMarca();
         llenarTabla();
         this.ventanaQueLlama = ventanaQueLlama; // Guardar la ventana que llama a MarcaIGU
 
-    
+    jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting()) {
+                    // Verificar si hay una fila seleccionada en la tabla
+                    if (jTable1.getSelectedRow() != -1) {
+                        jButton2.setEnabled(true); // Habilitar el botón "Aceptar"
+                    } else {
+                        jButton2.setEnabled(false); // Deshabilitar el botón "Aceptar"
+                    }
+                }
+            }
+        });
 
     jTextField1.getDocument().addDocumentListener(new DocumentListener() {
         public void insertUpdate(DocumentEvent e) {
@@ -299,7 +313,7 @@ private void actualizarTabla(List<Marca> marcas) {
 
         
       private void abrirVentanaRegistrarMarca() {
-    RegistrarMarca ventanaRegistrarMarca = new RegistrarMarca(this);
+    RegistrarMarca ventanaRegistrarMarca = new RegistrarMarca(this, rolUsuario);
     ventanaRegistrarMarca.setVisible(true);
     this.dispose();  // Cierra la ventana actual si es necesario
 }
@@ -323,9 +337,9 @@ private void actualizarTabla(List<Marca> marcas) {
 
     // Verifica si la ventana que llama es MarcaIGU y pasa su referencia a la ventana RegistrarVehiculo
     if (ventanaQueLlama instanceof MarcaIGU) {
-    ventanaRegistrarVehiculo = new RegistrarVehiculo(marcaSeleccionada, ventanaQueLlama);
+    ventanaRegistrarVehiculo = new RegistrarVehiculo(marcaSeleccionada, ventanaQueLlama, rolUsuario);
 } else {
-    ventanaRegistrarVehiculo = new RegistrarVehiculo(marcaSeleccionada, ventanaQueLlama);
+    ventanaRegistrarVehiculo = new RegistrarVehiculo(marcaSeleccionada, ventanaQueLlama, rolUsuario);
 }
 
 

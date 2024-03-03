@@ -9,6 +9,10 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
+import java.awt.Font;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -16,14 +20,27 @@ import javax.swing.UIManager;
  * @author ULTRA
  */
 public class Menu extends javax.swing.JFrame {
-
+    private String rolUsuario;
     /**
      * Creates new form Menu2
      */
-    public Menu() {
-        initComponents();
-    }
+    public Menu(String rolUsuario) {
+       initComponents();
+        this.rolUsuario = rolUsuario;
+        personalizarVentanaSegunRol();
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
 
+    }
+private void personalizarVentanaSegunRol() {
+        if ("Administrador".equals(rolUsuario)) {
+                        usuario.setEnabled(true);
+
+        } else if ("Estandar".equals(rolUsuario)) {
+            usuario.setEnabled(false);
+        } else {
+        }
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,33 +56,40 @@ public class Menu extends javax.swing.JFrame {
         Gestionarentrega = new javax.swing.JButton();
         RegistrarViaje = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        Registrarmantenimiento1 = new javax.swing.JButton();
+        usuario = new javax.swing.JButton();
+        Registrarenvio1 = new javax.swing.JButton();
+        Gestionarentrega1 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        Registrarenvio2 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Registrarenvio.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        Registrarenvio.setText("Registrar Paquete");
+        Registrarenvio.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Registrarenvio.setText("Registrar paquete");
         Registrarenvio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RegistrarenvioActionPerformed(evt);
             }
         });
 
-        Consultarestadopaquete.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        Consultarestadopaquete.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         Consultarestadopaquete.setText("Consultar estado del paquete");
         Consultarestadopaquete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,15 +97,15 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        Registrarmantenimiento.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        Registrarmantenimiento.setText("Registrar Parte Diario");
+        Registrarmantenimiento.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Registrarmantenimiento.setText("Registrar parte diario");
         Registrarmantenimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RegistrarmantenimientoActionPerformed(evt);
             }
         });
 
-        Gestionarentrega.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        Gestionarentrega.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         Gestionarentrega.setText("Gestionar entrega");
         Gestionarentrega.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,15 +113,15 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        RegistrarViaje.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        RegistrarViaje.setText("Registrar Viaje");
+        RegistrarViaje.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        RegistrarViaje.setText("Registrar viaje");
         RegistrarViaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RegistrarViajeActionPerformed(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jButton1.setText("Avisos pendientes");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,26 +129,19 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Commodore\\Downloads\\cole2.png")); // NOI18N
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel1.setMaximumSize(new java.awt.Dimension(300, 300));
-        jLabel1.setMinimumSize(new java.awt.Dimension(300, 300));
-        jLabel1.setPreferredSize(new java.awt.Dimension(300, 300));
-
-        jLabel2.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Gestion");
+        jLabel2.setText("Gestion de viajes y paquetes");
 
-        jLabel3.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Registro");
+        jLabel3.setText("Registros");
 
-        jLabel4.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Consultas y avisos");
+        jLabel4.setText("Gestion de clientes y vehiculos");
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jButton2.setText("Lista de vehiculos");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,7 +149,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jButton3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jButton3.setText("Lista de clientes");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,43 +157,105 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Direccion");
-
-        jLabel8.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Horario de atencion");
-
-        jLabel9.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel9.setText("¿Qué es Patria?");
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setText("Patria es un servicio de encomiendas que ofrece un servicio de envío de paquetes permitiendo");
+        jLabel5.setText("Patria es un servicio de encomiendas que ofrece un servicio de envío de paquetes permitiendo a los remitentes enviar");
 
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel10.setText("a los remitentes enviar productos a los destinatarios a través de un sistema de transporte.");
-        jLabel10.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel10.setText("productos a los destinatarios a través de un sistema de transporte.");
 
-        jLabel11.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel11.setText("La empresa Patria se esfuerza por brindar una experiencia de envío sin problemas, asegurando");
+        jLabel11.setText("La empresa Patria se esfuerza por brindar una experiencia de envío sin problemas, asegurando que cada paquete llegue");
 
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel12.setText("que cada paquete llegue a su destino final en perfectas condiciones.");
-        jLabel12.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel12.setText("a su destino final en perfectas condiciones.");
 
-        jLabel13.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Azcuénaga 5428");
+        jButton4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton4.setText("Salir");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Comercio");
+        Registrarmantenimiento1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Registrarmantenimiento1.setText("Historial de mantenimientos");
+        Registrarmantenimiento1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Registrarmantenimiento1ActionPerformed(evt);
+            }
+        });
+
+        usuario.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        usuario.setText("Registrar usuario");
+        usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usuarioActionPerformed(evt);
+            }
+        });
+
+        Registrarenvio1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Registrarenvio1.setText("Asociar paquete a viaje");
+        Registrarenvio1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Registrarenvio1ActionPerformed(evt);
+            }
+        });
+
+        Gestionarentrega1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Gestionarentrega1.setText("Historial de viajes");
+        Gestionarentrega1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Gestionarentrega1ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton5.setText("Cambiar de usuario");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Commodore\\Desktop\\proyecto\\backuplogistica\\src\\main\\resources\\logo.jpg")); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Gestión de usuarios");
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel7.setText("Con un enfoque en la eficiencia y la seguridad, Patria emplea métodos innovadores y un equipo dedicado a monitorear");
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel8.setText("cada etapa del proceso de entrega, garantizando la satisfacción del cliente.");
+
+        Registrarenvio2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Registrarenvio2.setText("Registrar estado de paquete");
+        Registrarenvio2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Registrarenvio2ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton6.setText("Hoja de ruta");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -185,102 +264,123 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Registrarmantenimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                        .addComponent(RegistrarViaje, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                        .addComponent(Registrarenvio, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
-                            .addGap(40, 40, 40)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Gestionarentrega, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Consultarestadopaquete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(Gestionarentrega1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(83, 83, 83)
+                                            .addComponent(Registrarmantenimiento1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Registrarmantenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Registrarenvio2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Registrarenvio, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(RegistrarViaje, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(83, 83, 83)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Gestionarentrega, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Registrarenvio1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Consultarestadopaquete, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(83, 83, 83)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton4)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(124, 124, 124))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68)))
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Registrarenvio, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Gestionarentrega, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Consultarestadopaquete, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                    .addComponent(Registrarenvio)
+                    .addComponent(usuario)
+                    .addComponent(jButton3)
+                    .addComponent(Registrarenvio1))
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RegistrarViaje, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(80, 80, 80)
+                    .addComponent(RegistrarViaje)
+                    .addComponent(jButton2)
+                    .addComponent(jButton5)
+                    .addComponent(Gestionarentrega))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Registrarmantenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Registrarmantenimiento)
+                    .addComponent(jButton1)
+                    .addComponent(Consultarestadopaquete))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Registrarenvio2)
+                    .addComponent(Registrarmantenimiento1)
+                    .addComponent(jButton6))
+                .addGap(28, 28, 28)
+                .addComponent(Gestionarentrega1)
+                .addGap(16, 16, 16)
+                .addComponent(jButton4)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void RegistrarenvioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarenvioActionPerformed
-       RegistrarPaquete ventanaRegistro = new RegistrarPaquete();
+       RegistrarPaquete ventanaRegistro = new RegistrarPaquete(rolUsuario);
         ventanaRegistro.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_RegistrarenvioActionPerformed
 
     private void ConsultarestadopaqueteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultarestadopaqueteActionPerformed
-        
-        
-        ConsultarEstadoPaquete consultapaquete = new ConsultarEstadoPaquete();
+               
+        ConsultadorEstadoPaquete consultapaquete = new ConsultadorEstadoPaquete(rolUsuario);
         consultapaquete.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ConsultarestadopaqueteActionPerformed
@@ -288,68 +388,142 @@ public class Menu extends javax.swing.JFrame {
     private void RegistrarmantenimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarmantenimientoActionPerformed
         
         
-         SeleccionVehiculoPD seleccionvehiculopd = new SeleccionVehiculoPD();
+         SeleccionVehiculoPD seleccionvehiculopd = new SeleccionVehiculoPD(rolUsuario);
         seleccionvehiculopd.setVisible(true);
         
         this.dispose();    }//GEN-LAST:event_RegistrarmantenimientoActionPerformed
 
-    private void GestionarentregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionarentregaActionPerformed
-        GestionarEntrega gestionentrega = new GestionarEntrega();
-        gestionentrega.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_GestionarentregaActionPerformed
-
     private void RegistrarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarViajeActionPerformed
-        ViajeIGU viajeigu = new ViajeIGU();
+        ViajeIGU viajeigu = new ViajeIGU(rolUsuario);
         viajeigu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_RegistrarViajeActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        AvisoMantenimiento avisosmante = new AvisoMantenimiento();
-    avisosmante.mostrarVentana(); // Llamar al método mostrarVentana() para actualizar la tabla
+        AvisoMantenimiento avisosmante = new AvisoMantenimiento(rolUsuario);
+        
     avisosmante.setVisible(true);
     this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        VehiculosTotales vehiculos = new VehiculosTotales();
-        vehiculos.setVisible(true);
+        VehiculosTotales vehiculos = new VehiculosTotales(rolUsuario);
+        vehiculos.mostrarVentana();
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        ClientesTotales clientes = new ClientesTotales();
+        ClientesTotales clientes = new ClientesTotales(rolUsuario);
         clientes.setVisible(true);
         dispose();
             }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    // Crear JLabel personalizado para el mensaje
+    JLabel mensaje = new JLabel("¿Registraste el parte diario?");
+    mensaje.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer el tipo de letra a Arial 18
+
+    // Configuración de las opciones del diálogo
+    Object[] options = {"Si", "No"};
+    int opcion = JOptionPane.showOptionDialog(this, 
+            mensaje, 
+            "Confirmación", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            options, 
+            options[0]);
+
+    // Verificar la opción seleccionada
+    if (opcion == JOptionPane.YES_OPTION) {
+        // Salir del programa
+        System.exit(0);
+    } else {
+        // Mostrar la pantalla de selección de vehículo para el parte diario
+        SeleccionVehiculoPD seleccionVehiculoPD = new SeleccionVehiculoPD(rolUsuario);
+        seleccionVehiculoPD.setVisible(true);
+        this.dispose();
+    }    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void Registrarmantenimiento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Registrarmantenimiento1ActionPerformed
+        VehiculosConMantenimiento vehiculosmante = new VehiculosConMantenimiento(rolUsuario);
+        vehiculosmante.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_Registrarmantenimiento1ActionPerformed
+
+    private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
+         RegistrarUsuario usuario = new RegistrarUsuario(rolUsuario);
+         usuario.setVisible(true);
+         dispose();
+
+    }//GEN-LAST:event_usuarioActionPerformed
+
+    private void Registrarenvio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Registrarenvio1ActionPerformed
+        PaquetesEncamino paqueteencamino = new PaquetesEncamino(rolUsuario);
+        paqueteencamino.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_Registrarenvio1ActionPerformed
+
+    private void GestionarentregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GestionarentregaActionPerformed
+        ViajesEntrega gestionentrega = new ViajesEntrega( rolUsuario);
+        gestionentrega.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_GestionarentregaActionPerformed
+
+    private void Gestionarentrega1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gestionarentrega1ActionPerformed
+        HistorialViajes historial = new HistorialViajes(rolUsuario);
+        historial.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_Gestionarentrega1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        Login atras = new Login();
+        atras.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void Registrarenvio2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Registrarenvio2ActionPerformed
+        // TODO add your handling code here:
+        Viajes viajes = new Viajes(rolUsuario);
+        viajes.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_Registrarenvio2ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        HojaDeRuta hojaderuta = new HojaDeRuta(rolUsuario);
+        hojaderuta.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        IntelliJTheme.setup(Menu.class.getResourceAsStream("/nord.theme.json"));
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Menu().setVisible(true);
-            }
-        });
-    }
+  
 
+   
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Consultarestadopaquete;
     private javax.swing.JButton Gestionarentrega;
+    private javax.swing.JButton Gestionarentrega1;
     private javax.swing.JButton RegistrarViaje;
     private javax.swing.JButton Registrarenvio;
+    private javax.swing.JButton Registrarenvio1;
+    private javax.swing.JButton Registrarenvio2;
     private javax.swing.JButton Registrarmantenimiento;
+    private javax.swing.JButton Registrarmantenimiento1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -358,5 +532,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton usuario;
     // End of variables declaration//GEN-END:variables
 }

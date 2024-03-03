@@ -8,8 +8,15 @@ import Controladoras.ControladoraMantenimiento;
 import Controladoras.ControladoraMantenimientoRealizado;
 import Controladoras.ControladoraParteDiario;
 import Controladoras.ControladoraVehiculo;
+import java.awt.Font;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import logisticalogica.MantenimientoRealizado;
 import logisticalogica.ParteDiario;
@@ -20,20 +27,49 @@ import logisticalogica.Vehiculo;
  * @author ULTRA
  */
 public  class AvisoMantenimiento extends javax.swing.JFrame {
- private ControladoraMantenimiento controladoramante = new ControladoraMantenimiento();
+    private ControladoraMantenimiento controladoramante = new ControladoraMantenimiento();
     private ControladoraVehiculo controladoravehiculo = new ControladoraVehiculo();
     private Vehiculo vehiculoseleccionado;
     private ControladoraMantenimientoRealizado controladoramanterealizado = new ControladoraMantenimientoRealizado();
     private ControladoraParteDiario controladoraPD = new ControladoraParteDiario();
+    private List<ParteDiario> parteDiarioList;
+    private String rolUsuario;
+
     /**
      * Creates new form AvisoMantenimiento
      */
-    public AvisoMantenimiento() {
+    public AvisoMantenimiento(String rolUsuario) {
         initComponents();
-    actualizarTablaAvisoMantenimiento(); // Llama al método para actualizar la tabla al crear la ventana
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
+        actualizarTablaAvisoMantenimiento();
+        this.rolUsuario = rolUsuario;
+        // Llama al método para actualizar la tabla al crear la ventana
+        
+        // Crear un renderizador personalizado para los encabezados de las columnas
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda horizontalmente
+        headerRenderer.setVerticalAlignment(SwingConstants.CENTER); // Centrar verticalmente
+        headerRenderer.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer la fuente a Arial 18
+        
+        // Aplicar el renderizador personalizado a los encabezados de las columnas
+        jTable1.getTableHeader().setDefaultRenderer(headerRenderer);
 
-
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            // Verificar si se ha seleccionado una fila en la tabla
+            if (!jTable1.getSelectionModel().isSelectionEmpty()) {
+                // Habilitar el botón "Aceptar"
+                jButton1.setEnabled(true);
+            } else {
+                // Deshabilitar el botón "Aceptar"
+                jButton1.setEnabled(false);
+            }
+        }
+    });
+    
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,16 +89,16 @@ public  class AvisoMantenimiento extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Vehiculo", "Tipo", "Patente", "Kilometros", "Estado"
+                "ID", "Vehiculo", "Tipo", "Patente", "Kilometros", "Estado", "Fecha"
             }
         ));
         jScrollPane2.setViewportView(jTable1);
@@ -92,17 +128,16 @@ public  class AvisoMantenimiento extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1894, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton2))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2)))
-                .addContainerGap())
+                        .addComponent(jButton1)
+                        .addGap(100, 100, 100)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1334, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,12 +145,12 @@ public  class AvisoMantenimiento extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 860, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -133,8 +168,7 @@ public  class AvisoMantenimiento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-   // Obtener el índice de la fila seleccionada directamente del componente jTable1
-    int filaSeleccionada = jTable1.getSelectedRow();
+  int filaSeleccionada = jTable1.getSelectedRow();
 
     // Verificar si se ha seleccionado una fila válida
     if (filaSeleccionada != -1) {
@@ -144,26 +178,43 @@ public  class AvisoMantenimiento extends javax.swing.JFrame {
         // Obtener el vehículo correspondiente a partir del ID en la base de datos
         vehiculoseleccionado = controladoravehiculo.obtenerVehiculoPorID(idVehiculoSeleccionado);
 
-        // Mostrar un cuadro de diálogo de confirmación
-        int opcion = JOptionPane.showConfirmDialog(this, "¿Estás seguro que quieres seleccionar el vehículo con patente " + vehiculoseleccionado.getPatente() + "?", "Confirmar selección", JOptionPane.YES_NO_OPTION);
+        // Crear el mensaje con la patente del vehículo seleccionado
+        String mensaje = "¿Estás seguro que quieres seleccionar el vehículo con patente " + vehiculoseleccionado.getPatente() + "?";
 
+        // Crear un JLabel para personalizar el mensaje
+        JLabel selecvehiculopatente = new JLabel(mensaje);
+        // Establecer la fuente del JLabel
+        selecvehiculopatente.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        // Crear un array de objetos para personalizar los botones del JOptionPane
+        Object[] options = {"Si", "No"};
+
+        // Mostrar el cuadro de diálogo de confirmación con el JLabel personalizado, las opciones de botones modificadas y el título personalizado
+        int opcion = JOptionPane.showOptionDialog(this, selecvehiculopatente, "Confirmar selección", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        
         // Verificar la opción seleccionada por el usuario
         if (opcion == JOptionPane.YES_OPTION) {
             // Resto del código para mostrar la ventana ConfirmarMantenimiento y cerrar la ventana actual
-            ConfirmarMantenimiento confirmarMantenimientoFrame = new ConfirmarMantenimiento(vehiculoseleccionado);
+            ConfirmarMantenimiento confirmarMantenimientoFrame = new ConfirmarMantenimiento(vehiculoseleccionado, rolUsuario); // Pasar el rolUsuario
             confirmarMantenimientoFrame.setVisible(true);
-
             // Cerrar la ventana actual
             this.dispose();
         }
     } else {
         // Mostrar un mensaje si no se ha seleccionado ninguna fila válida
-        JOptionPane.showMessageDialog(this, "Seleccione un vehículo primero", "Error", JOptionPane.ERROR_MESSAGE);
+        // Crear un JLabel para personalizar el mensaje
+        JLabel selecvehiculo = new JLabel("Seleccione un vehículo primero");
+        // Establecer la fuente del JLabel
+        selecvehiculo.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        // Mostrar el cuadro de diálogo de error con el JLabel personalizado y el título personalizado
+        JOptionPane.showMessageDialog(this, selecvehiculo, "Error", JOptionPane.ERROR_MESSAGE);
+
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Menu atras = new Menu();
+        Menu atras = new Menu( rolUsuario);
         atras.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -176,10 +227,9 @@ public  class AvisoMantenimiento extends javax.swing.JFrame {
         // Llenar la tabla con los vehículos que necesitan mantenimiento
         mostrarVehiculosEnTabla();
     }
-   
-private void mostrarVehiculosEnTabla() {
-    // Obtener todos los vehículos
-    List<Vehiculo> vehiculos = controladoravehiculo.obtenerTodosLosVehiculos();
+ private void mostrarVehiculosEnTabla() {
+     
+     List<Vehiculo> vehiculos = controladoravehiculo.obtenerTodosLosVehiculos();
 
     // Crear el modelo de tabla
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -195,7 +245,7 @@ private void mostrarVehiculosEnTabla() {
         // Obtener el último mantenimiento realizado
         MantenimientoRealizado ultimoMantenimiento = controladoramanterealizado.obtenerUltimoMantenimientoRealizado(vehiculo);
         // Obtener todos los ParteDiario para el vehículo
-        List<ParteDiario> parteDiarioList = controladoraPD.obtenerParteDiarioPorVehiculo(vehiculo);
+        parteDiarioList = controladoraPD.obtenerParteDiarioPorVehiculo(vehiculo);
 
         // Calcular los kilómetros totales recorridos desde el último mantenimiento
         int kmTotales = 0;
@@ -205,21 +255,17 @@ private void mostrarVehiculosEnTabla() {
             }
         }
 
-        // Restar los kilómetros del último mantenimiento
         if (ultimoMantenimiento != null) {
             kmTotales -= ultimoMantenimiento.getKmMantenimiento();
         }
 
-        // Verificar si el vehículo necesita mantenimiento (supera los 10000 km)
         boolean necesitaMantenimiento = (ultimoMantenimiento != null && kmTotales >= 10000) ||
             (ultimoMantenimiento == null && (vehiculo.getMantenimiento() != null && vehiculo.getMantenimiento().getKm() >= 10000 || vehiculo.getMantenimiento() == null && kmTotales >= 10000));
 
-        // Si el vehículo no necesita mantenimiento, no lo agregues a la tabla
         if (!necesitaMantenimiento || !"Activo".equalsIgnoreCase(vehiculo.getEstado())) {
             continue;
         }
 
-        // Agregar a la tabla solo si necesita mantenimiento y tiene estado "Activo"
         Object[] fila = {
             vehiculo.getVehiculoID(),
             vehiculo.getMarca().getModelo(),
@@ -227,7 +273,6 @@ private void mostrarVehiculosEnTabla() {
             vehiculo.getPatente(),
             kmTotales,
             vehiculo.getEstado()
-                
         };
         modeloTabla.addRow(fila);
     }
@@ -235,12 +280,11 @@ private void mostrarVehiculosEnTabla() {
     // Establecer el modelo en la tabla
     jTable1.setModel(modeloTabla);
 }
-
-// Método para mostrar la ventana
-    public void mostrarVentana() {
+public void mostrarVentana() {
         mostrarVehiculosEnTabla(); // Llama al método para actualizar la tabla cada vez que se muestra la ventana
         setVisible(true);
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

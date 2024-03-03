@@ -27,10 +27,12 @@ public class RegistrarVehiculo extends javax.swing.JFrame {
     private VehiculosTotales vehiculosTotales;
     private JFrame ventanaOrigen;
     private Object ventanaQueLlama;
+    private String rolUsuario;
     /**
      * Creates new form RegistrarVehiculo
-     */ public RegistrarVehiculo(Marca marcaSeleccionada, Object ventanaQueLlama) {
+     */ public RegistrarVehiculo(Marca marcaSeleccionada, Object ventanaQueLlama, String rolUsuario) {
         initComponents();
+        this.rolUsuario = rolUsuario;
         this.marcaSeleccionada = marcaSeleccionada;
         this.ventanaQueLlama = ventanaQueLlama;
         controladoravehiculo = new ControladoraVehiculo();
@@ -168,41 +170,51 @@ public class RegistrarVehiculo extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
- int capacidadCarga = Integer.parseInt(jTextField1.getText());
+ String capacidadCargaStr = jTextField1.getText();
     String patente = jTextField2.getText();
 
-    Vehiculo nuevoVehiculo = new Vehiculo();
-    nuevoVehiculo.setCapacidad_carga(capacidadCarga);
-    nuevoVehiculo.setPatente(patente);
-    nuevoVehiculo.setMarca(marcaSeleccionada);
+    // Verificar si todos los campos están llenos y si la capacidad de carga es un número válido
+    if (!capacidadCargaStr.isEmpty() && !patente.isEmpty()) {
+        try {
+            int capacidadCarga = Integer.parseInt(capacidadCargaStr);
 
-    int numeroVehiculo = obtenerNumeroVehiculo();
+            Vehiculo nuevoVehiculo = new Vehiculo();
+            nuevoVehiculo.setCapacidad_carga(capacidadCarga);
+            nuevoVehiculo.setPatente(patente);
+            nuevoVehiculo.setMarca(marcaSeleccionada);
 
-    nuevoVehiculo.setNro_vehiculo(numeroVehiculo);
-    guardarVehiculoEnBaseDeDatos(nuevoVehiculo);
+            int numeroVehiculo = obtenerNumeroVehiculo();
 
-   // Verifica qué tipo de ventana llamó a RegistrarVehiculo y la hace visible nuevamente
-   if (ventanaQueLlama instanceof MarcaIGU) {
-    MarcaIGU marcaIGU = (MarcaIGU) ventanaQueLlama;
-    marcaIGU.mostrarMarcaIGU(); // Muestra la ventana MarcaIGU
-} else if (ventanaQueLlama instanceof ViajeIGU) {
-    ViajeIGU viajeIGU = (ViajeIGU) ventanaQueLlama;
-    viajeIGU.setVisible(true); // Muestra la ventana ViajeIGU
-    viajeIGU.mostrarVentana();
-} else if (ventanaQueLlama instanceof VehiculosTotales) {
-    VehiculosTotales vehiculosTotales = (VehiculosTotales) ventanaQueLlama;
-    vehiculosTotales.mostrarVentana(); // Muestra la ventana VehiculosTotales y actualiza la tabla de vehículos
-} else {
-    // Si no se puede determinar la ventana de origen, muestra un mensaje o realiza alguna acción por defecto
-    System.out.println("No se puede determinar la ventana de origen");
-}
+            nuevoVehiculo.setNro_vehiculo(numeroVehiculo);
+            guardarVehiculoEnBaseDeDatos(nuevoVehiculo);
 
-// Cierra la ventana actual
-dispose();
+            if (ventanaQueLlama instanceof MarcaIGU) {
+                MarcaIGU marcaIGU = (MarcaIGU) ventanaQueLlama;
+                marcaIGU.mostrarMarcaIGU(); // Muestra la ventana MarcaIGU
+            } else if (ventanaQueLlama instanceof ViajeIGU) {
+                ViajeIGU viajeIGU = (ViajeIGU) ventanaQueLlama;
+                viajeIGU.setVisible(true); // Muestra la ventana ViajeIGU
+                viajeIGU.mostrarVentana();
+            } else if (ventanaQueLlama instanceof VehiculosTotales) {
+                VehiculosTotales vehiculosTotales = (VehiculosTotales) ventanaQueLlama;
+                vehiculosTotales.mostrarVentana(); // Muestra la ventana VehiculosTotales y actualiza la tabla de vehículos
+            } else {
+                // Si no se puede determinar la ventana de origen, muestra un mensaje o realiza alguna acción por defecto
+                System.out.println("No se puede determinar la ventana de origen");
+            }
+
+            // Cierra la ventana actual
+            dispose();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La capacidad de carga debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        MarcaIGU atras = new MarcaIGU(this.marcaigu);
+        MarcaIGU atras = new MarcaIGU(this.marcaigu, rolUsuario);
         atras.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -236,12 +248,18 @@ private void inicializarNumerosDisponibles() {
         return numero;
     }
     
-    private void guardarVehiculoEnBaseDeDatos(Vehiculo vehiculo) {
-        // Llama a tu método para guardar el vehículo en la base de datos
+   private void guardarVehiculoEnBaseDeDatos(Vehiculo vehiculo) {
+    // Verificar si ya existe un vehículo con la misma patente en la base de datos
+    if (!controladoravehiculo.existeVehiculoConPatente(vehiculo.getPatente())) {
+        // Si no existe, guardar el vehículo en la base de datos
         controladoravehiculo.guardarvehiculo(vehiculo);
-        // Actualiza la interfaz según sea necesario
-        // ...
+        // Actualizar la interfaz según sea necesario
+        // Aquí puedes agregar código para actualizar la interfaz si es necesario
+    } else {
+        // Si ya existe un vehículo con la misma patente, mostrar un mensaje de error
+        JOptionPane.showMessageDialog(this, "Ya existe un vehículo con la misma patente.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

@@ -5,12 +5,19 @@
 package logisticaigu;
 
 import Controladoras.ControladoraVehiculo;
+import java.awt.Font;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import static logisticalogica.Usuario_.rolUsuario;
 import logisticalogica.Vehiculo;
 
 /**
@@ -21,22 +28,41 @@ public class ViajeIGU extends javax.swing.JFrame {
     private ControladoraVehiculo controladoraVehiculo = new ControladoraVehiculo();
     private List<Vehiculo> vehiculos;
     private int idVehiculoSeleccionado;
-
+    private String rolUsuario ; 
     /**
      * Creates new form Viaje
      */
-    public ViajeIGU() {
+    public ViajeIGU(String rolUsuario) {
         initComponents();
         this.idVehiculoSeleccionado = idVehiculoSeleccionado;
-
+        this.rolUsuario = rolUsuario;
         mostrarTodosLosVehiculos();
-     /*   if ("ADMINISTRADOR".equals(rolUsuario)) {
-        jButton3.setVisible(true);  // Mostrar el botón para el rol "Administrador"
-    } else {
-        jButton3.setVisible(false);  // Ocultar el botón para otros roles
-    }
-        */
- // Agregar DocumentListener a los campos de texto
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Abre el JFrame en pantalla completa
+        
+        // Crear un renderizador personalizado para los encabezados de las columnas
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda horizontalmente
+        headerRenderer.setVerticalAlignment(SwingConstants.CENTER); // Centrar verticalmente
+        headerRenderer.setFont(new Font("Arial", Font.PLAIN, 18)); // Establecer la fuente a Arial 18
+        
+        // Aplicar el renderizador personalizado a los encabezados de las columnas
+        jTable1.getTableHeader().setDefaultRenderer(headerRenderer);  
+        
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            // Verificar si hay una fila seleccionada en la tabla
+            if (!jTable1.getSelectionModel().isSelectionEmpty()) {
+                // Habilitar el botón "Dar de baja"
+                jButton2.setEnabled(true);
+            } else {
+                // Deshabilitar el botón "Dar de baja"
+                jButton2.setEnabled(false);
+            }
+        }
+    });             
+        
+        // Agregar DocumentListener a los campos de texto
         jTextField1.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -98,7 +124,7 @@ public class ViajeIGU extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Seleccion de vehiculo para viaje");
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -107,7 +133,7 @@ public class ViajeIGU extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Modelo", "Capacidad de carga", "N° Vehiculo", "Patente"
+                "Modelo", "Capacidad de carga (Kg)", "N° Vehiculo", "Patente"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -121,7 +147,7 @@ public class ViajeIGU extends javax.swing.JFrame {
         });
 
         jButton2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jButton2.setText("Aceptar");
+        jButton2.setText("Seleccionar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -150,22 +176,22 @@ public class ViajeIGU extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1888, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2)
                         .addGap(100, 100, 100)
                         .addComponent(jButton1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 643, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -183,8 +209,8 @@ public class ViajeIGU extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,14 +238,14 @@ public class ViajeIGU extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Menu atras = new Menu();
+        Menu atras = new Menu(rolUsuario);
         atras.setVisible(true);
         dispose(); // Cierra la pantalla actual
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        MarcaIGU marca = new MarcaIGU(this);
-        marca.setVisible(true);
+        RegistrarMarcaVehiculo marcavehiculo = new RegistrarMarcaVehiculo(this, rolUsuario);
+        marcavehiculo.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
      private void mostrarTodosLosVehiculos() {
@@ -255,66 +281,46 @@ public class ViajeIGU extends javax.swing.JFrame {
     }
 }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViajeIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViajeIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViajeIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViajeIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ViajeIGU().setVisible(true);
-            }
-        });
-    }
+    
      private void confirmarSeleccionVehiculo() {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow >= 0) {
             Vehiculo vehiculoSeleccionado = vehiculos.get(selectedRow);
 
-            int opcion = javax.swing.JOptionPane.showConfirmDialog(
-                this,
-                "¿Seguro que desea seleccionar el vehículo con patente " + vehiculoSeleccionado.getPatente() + "?",
-                "Confirmar Selección",
-                javax.swing.JOptionPane.YES_NO_OPTION
-            );
+            // Personalizar el mensaje con un JLabel y establecer la fuente
+            JLabel selecvehiculopatente = new JLabel("¿Seguro que desea seleccionar el vehículo con patente " + vehiculoSeleccionado.getPatente() + "?");
+            selecvehiculopatente.setFont(new Font("Arial", Font.PLAIN, 18));
+
+            // Personalizar las opciones de los botones
+            Object[] options = {"Sí", "No"};
+
+            int opcion = javax.swing.JOptionPane.showOptionDialog(
+            this,
+            selecvehiculopatente,
+            "Confirmar Selección",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]
+        );
 
             if (opcion == javax.swing.JOptionPane.YES_OPTION) {
                 // El usuario seleccionó "Sí", abrir el formulario RegistrarViaje y pasar el objeto Vehiculo
-                RegistrarViaje registrarViaje = new RegistrarViaje(vehiculoSeleccionado);
+                RegistrarViaje registrarViaje = new RegistrarViaje(vehiculoSeleccionado, rolUsuario);
                 registrarViaje.setVisible(true);
                 this.dispose(); // Cierra la ventana actual
             }
         } else {
             // No se ha seleccionado ningún vehículo
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Por favor, seleccione un vehículo antes de continuar.",
-                "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
-            );
+            // Crear un JLabel para personalizar el mensaje
+            JLabel seleccionvehiculo = new JLabel("Por favor, seleccione un vehículo antes de continuar.");
+            // Establecer la fuente del JLabel
+            seleccionvehiculo.setFont(new Font("Arial", Font.PLAIN, 18));
+
+            // Mostrar el cuadro de diálogo de error con el JLabel personalizado
+            JOptionPane.showMessageDialog(this, seleccionvehiculo, "Error", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 
